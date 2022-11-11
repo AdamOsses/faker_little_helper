@@ -88,9 +88,9 @@ for _ in range(row_count):
         DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
         DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
     if is_email_column:
-        DATA = DATA[:email_column_position] \
-               + [fake_first_name+'.'+fake_last_name+'_'+fake.domain_name()] \
-               + DATA[email_column_position+1:]
+        email_str = fake_first_name+'.'+fake_last_name+'_'+fake.domain_name()
+        email_str = email_str.lower()
+        DATA = DATA[:email_column_position] + [email_str] + DATA[email_column_position+1:]
 
     row = fake.csv(data_columns=DATA, num_rows=1, include_row_ids=False)
     row = row.replace('_', '@')  # for some reason fake.csv() doesn't display '@' correctly
