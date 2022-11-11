@@ -32,8 +32,8 @@ providers = {
     'e': '{{email}}',
 }
 
-selected_column = "abcde"  # temp - add: input()
-row_count = 10  # tmp
+selected_column = "edcba"  # temp - add: input()
+row_count = 20  # tmp
 # add: cut repeated letters
 
 if 'd' in selected_column:
@@ -55,14 +55,6 @@ if 'e' in selected_column:
 for column in selected_column:
     DATA.append(providers.get(column, ''))
 print('raw data: ', DATA)
-# raw data generated! so we have list of columns like:
-# ['--gender--',  '{{fist_name_male}}', '{{last_name}}'
-# check if gender or email or (name and first/last name)
-#  mod. DATA if:
-#  1. Check if gender col. - (rnd male/female)
-#  1a. first_name is affected by gender column
-#  email column: use faker.email() if no name/first/last name selected
-#  else is composed as:  first_name.last_name@domain_name
 
 # generate and write fake rows
 file = open('file.csv', 'w', newline='')
@@ -77,16 +69,15 @@ for _ in range(row_count):
         fake_first_name = fake.first_name_male() if fake_gender == 'male' else fake.first_name_female()
         #print(f'{fake_gender}-->{fake_first_name}')
         fake_name = fake_first_name + " " + fake_last_name
-    if is_first_name_column and is_gender_column:
-        DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position+1:]
-    if is_name_column and is_gender_column:
-        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position+1:]
-    if is_last_name_column and is_name_column:
-        DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position+1:]
-        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position+1:]
-    if is_first_name_column and is_name_column:
-        DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
+        if is_first_name_column:
+            DATA = DATA[:first_name_column_position] + [fake_first_name] \
+                   + DATA[first_name_column_position+1:]
+    if is_name_column and (is_first_name_column or is_last_name_column or is_email_column):
         DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
+        if is_last_name_column:
+            DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position + 1:]
+        if is_first_name_column:
+            DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
     if is_email_column:
         email_str = fake_first_name+'.'+fake_last_name+'_'+fake.domain_name()
         email_str = email_str.lower()
@@ -97,3 +88,14 @@ for _ in range(row_count):
     print(row, end='')
     file.write(row)
 file.close()
+
+'''
+    if is_name_column and is_gender_column:
+        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position+1:]
+    if is_last_name_column and is_name_column:
+        DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position+1:]
+        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position+1:]
+    if is_first_name_column and is_name_column:
+        DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
+        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
+'''
