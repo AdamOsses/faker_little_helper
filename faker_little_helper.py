@@ -31,10 +31,16 @@ providers = {
     'd': '--gender--',
     'e': '{{email}}',
 }
+providers_char = ''.join(key for key in providers)
+selected_column_raw = "edqrddfabcd"  # temp - add: input() - doubles and 'empty' char possible
+row_count = 5  # tmp
+# remove doubles and 'empty' chars
+selected_column = ''
+for c in selected_column_raw:
+    if c not in selected_column and c in providers_char:
+        selected_column += c
 
-selected_column = "edcba"  # temp - add: input()
-row_count = 20  # tmp
-# add: cut repeated letters
+print(f'providers_char: {providers_char}\nselected_column_raw: {selected_column_raw}\nselected_column: {selected_column}')
 
 if 'd' in selected_column:
     is_gender_column = True
