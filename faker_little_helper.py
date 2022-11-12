@@ -32,7 +32,7 @@ providers = {
     'e': '{{email}}',
 }
 providers_char = ''.join(key for key in providers)
-selected_column_raw = "edqrddfabcd"  # temp - add: input() - doubles and 'empty' char possible
+selected_column_raw = "da"  # temp - add: input() - doubles and 'empty' char possible
 row_count = 5  # tmp
 # remove doubles and 'empty' chars
 selected_column = ''
@@ -40,7 +40,8 @@ for c in selected_column_raw:
     if c not in selected_column and c in providers_char:
         selected_column += c
 
-print(f'providers_char: {providers_char}\nselected_column_raw: {selected_column_raw}\nselected_column: {selected_column}')
+print(f'providers_char: {providers_char}\nselected_column_raw: {selected_column_raw}'
+      f'\nselected_column: {selected_column}')
 
 if 'd' in selected_column:
     is_gender_column = True
@@ -73,12 +74,12 @@ for _ in range(row_count):
         DATA = DATA[:gender_column_position] + [fake_gender] + DATA[gender_column_position+1:]
     if (is_name_column or is_first_name_column) and is_gender_column:
         fake_first_name = fake.first_name_male() if fake_gender == 'male' else fake.first_name_female()
-        #print(f'{fake_gender}-->{fake_first_name}')
+        print(f'{fake_gender}-->{fake_first_name}')
         fake_name = fake_first_name + " " + fake_last_name
         if is_first_name_column:
             DATA = DATA[:first_name_column_position] + [fake_first_name] \
                    + DATA[first_name_column_position+1:]
-    if is_name_column and (is_first_name_column or is_last_name_column or is_email_column):
+    if is_name_column and (is_first_name_column or is_last_name_column or is_email_column or is_gender_column):
         DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
         if is_last_name_column:
             DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position + 1:]
