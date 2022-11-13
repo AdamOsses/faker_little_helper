@@ -8,15 +8,17 @@ fake_name = '-X-'
 fake_first_name = '-X-'
 fake_last_name = '-X-'
 is_gender_column = False
-gender_column_position = 0
 is_name_column = False
 is_first_name_column = False
 is_last_name_column = False
 is_email_column = False
+gender_column_position = 0
 name_column_position = 0
 first_name_column_position = 0
 last_name_column_position = 0
 email_column_position = 0
+row_count = 5  # tmp
+selected_column = ''
 
 # Menu
 print('*' * 50)
@@ -32,10 +34,19 @@ providers = {
     'e': '{{email}}',
 }
 providers_char = ''.join(key for key in providers)
-selected_column_raw = "da"  # temp - add: input() - doubles and 'empty' char possible
-row_count = 5  # tmp
+selected_column_raw = "[doh]dadadac[uyt]"  # temp - add: input() - doubles and 'empty' char possible
+
+# read data in brackets [] - row count; language; filename
+bracket_l_pos = selected_column_raw.find('[')
+bracket_r_pos = selected_column_raw.find(']')
+if bracket_r_pos > bracket_l_pos:
+    bracket_data = selected_column_raw[bracket_l_pos+1:bracket_r_pos]
+    selected_column_raw = selected_column_raw[:bracket_l_pos] + selected_column_raw[bracket_r_pos+1:]
+    print(f'-bracket_data: {bracket_data}')
+    print(f'-selected_column_raw: {selected_column_raw}')
+    #fake = Faker(['pl_PL', 'en'])
+
 # remove doubles and 'empty' chars
-selected_column = ''
 for c in selected_column_raw:
     if c not in selected_column and c in providers_char:
         selected_column += c
@@ -74,7 +85,7 @@ for _ in range(row_count):
         DATA = DATA[:gender_column_position] + [fake_gender] + DATA[gender_column_position+1:]
     if (is_name_column or is_first_name_column) and is_gender_column:
         fake_first_name = fake.first_name_male() if fake_gender == 'male' else fake.first_name_female()
-        print(f'{fake_gender}-->{fake_first_name}')
+        #  print(f'{fake_gender}-->{fake_first_name}')
         fake_name = fake_first_name + " " + fake_last_name
         if is_first_name_column:
             DATA = DATA[:first_name_column_position] + [fake_first_name] \
@@ -95,14 +106,3 @@ for _ in range(row_count):
     print(row, end='')
     file.write(row)
 file.close()
-
-'''
-    if is_name_column and is_gender_column:
-        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position+1:]
-    if is_last_name_column and is_name_column:
-        DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position+1:]
-        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position+1:]
-    if is_first_name_column and is_name_column:
-        DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
-        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
-'''
