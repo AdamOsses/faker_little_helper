@@ -17,8 +17,9 @@ name_column_position = 0
 first_name_column_position = 0
 last_name_column_position = 0
 email_column_position = 0
-row_count = 5  # tmp
+row_count = 0  # tmp
 selected_column = ''
+locale = []  # ['en', 'pl_PL']
 
 # Menu
 print('*' * 50)
@@ -34,9 +35,9 @@ providers = {
     'e': '{{email}}',
 }
 providers_char = ''.join(key for key in providers)
-selected_column_raw = "[doh]dadadac[uyt]"  # temp - add: input() - doubles and 'empty' char possible
+selected_column_raw = "[cz_CZy 3 pl_PL]dadadabc"  # temp - add: input() - doubles and 'empty' char possible
 
-# read data in brackets [] - row count; language; filename
+# read data in brackets [] - row count; locales; filename
 bracket_l_pos = selected_column_raw.find('[')
 bracket_r_pos = selected_column_raw.find(']')
 if bracket_r_pos > bracket_l_pos:
@@ -44,7 +45,19 @@ if bracket_r_pos > bracket_l_pos:
     selected_column_raw = selected_column_raw[:bracket_l_pos] + selected_column_raw[bracket_r_pos+1:]
     print(f'-bracket_data: {bracket_data}')
     print(f'-selected_column_raw: {selected_column_raw}')
-    #fake = Faker(['pl_PL', 'en'])
+    elem = bracket_data.split(' ')
+    print(elem)
+    for e in elem:
+        if e.isdigit():
+            row_count += int(e)
+        else:
+            try:
+                Faker(e)
+            except AttributeError:
+                print(f'Locale issue: {e} - check: https://faker.readthedocs.io/en/master/locales.html')
+            else:
+                locale.append(e)
+
 
 # remove doubles and 'empty' chars
 for c in selected_column_raw:
@@ -75,6 +88,7 @@ for column in selected_column:
 print('raw data: ', DATA)
 
 # generate and write fake rows
+fake = Faker(locale)
 file = open('file.csv', 'w', newline='')
 for _ in range(row_count):
     fake_last_name = fake.last_name()
