@@ -1,6 +1,19 @@
 import random
+import os
+import readline
 from faker import Faker
 from pathvalidate import sanitize_filename
+
+
+def txt_input(prompt, prefill=''):
+    readline.set_startup_hook(lambda: readline.insert_text(prefill))
+    try:
+        return input(prompt)
+    finally:
+        readline.set_startup_hook()
+
+
+os.system('clear')
 
 fake = Faker()
 DATA = []
@@ -38,10 +51,10 @@ providers = {
 }
 providers_char = ''.join(key for key in providers)
 
-selected_column_raw = '["my_fi.csv le*1.csv" cz_CZy 1 pl_PLx "my_file.csv"]dadadabc'
+selected_column_raw = '["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]dadadabc'
 # temp - add: input() - doubles and 'empty' char possible
 
-# read data in brackets [] - row count; locales; filename
+# read data in brackets [] - row count; locales (cz_CZ, en...); filename
 bracket_l_pos = selected_column_raw.find('[')
 bracket_r_pos = selected_column_raw.find(']')
 if bracket_r_pos > bracket_l_pos:
