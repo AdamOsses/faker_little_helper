@@ -48,10 +48,21 @@ providers = {
     'c': '{{last_name}}',
     'd': '--gender--',
     'e': '{{email}}',
-}
+    'f': '{{password}}',
+    'g': '{{country}}',
+    'h': '{{city}}',
+    'i': '{{street_address}}',
+    'j': '{{job}}',
+    'k': '{{company}}',
+    'l': '{{company_email}}',
+    'm': '{{domain_name}}',
+    'n': '{{phone_number}}',
+    #    '': '{{}}',
+
+}  # {{iban}} {{credit_card_number}} {{credit_card_provider}} {{currency}}
 providers_char = ''.join(key for key in providers)
 
-selected_column_raw = '["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]dadadabc'
+selected_column_raw = '["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]ejklmn'
 # temp - add: input() - doubles and 'empty' char possible
 
 # read data in brackets [] - row count; locales (cz_CZ, en...); filename
