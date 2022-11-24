@@ -36,11 +36,6 @@ selected_column = ''
 locale = ['en']  # ['en', 'pl_PL']
 files = []
 
-# Menu
-print('*' * 50)
-print('a - name\tb - first name\tc - last name')
-print('d- gender\te - email')
-print('*' * 50)
 
 providers = {
     'a': '{{name}}',
@@ -61,6 +56,21 @@ providers = {
 
 }  # {{iban}} {{credit_card_number}} {{credit_card_provider}} {{currency}}
 providers_char = ''.join(key for key in providers)
+
+# Menu - prints all providers
+print('*' * 100)
+for i in range(97, len(providers)+97):
+    print(f'{chr(i)} - {providers[chr(i)][2:-2]}', end='\t')
+    if not (i % 6):
+        print('')
+print('')
+print('*' * 100)
+print('Set columns you want using above letters. FLH write 20 rows to file.csv')
+print('Default filename: file.csv, default rows count: 20, default locale: en')
+print('Use [] to change default values: \n'
+      '   [cz_CZ 100 "my_file.csv"]acj - write 100 data rows to my_file.csv, locale: Czech, columns: acj\n'
+      '   [10 "file1.csv" "file2.csv"]mgah - write 10 data rows to file1.csv and file2.csv, columns: mgah')
+print('*' * 100)
 
 selected_column_raw = '["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]ejklmn'
 # temp - add: input() - doubles and 'empty' char possible
