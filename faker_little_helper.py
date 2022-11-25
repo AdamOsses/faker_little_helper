@@ -31,9 +31,9 @@ name_column_position = 0
 first_name_column_position = 0
 last_name_column_position = 0
 email_column_position = 0
-row_count = 0  # tmp
+row_count = 0
 selected_column = ''
-locale = ['en']  # ['en', 'pl_PL']
+locale = []  # ['en', 'pl_PL']
 files = []
 
 
@@ -72,10 +72,11 @@ print('Use [] to change default values: \n'
       '   [10 "file1.csv" "file2.csv"]mgah - write 10 data rows to file1.csv and file2.csv, columns: mgah')
 print('*' * 100)
 
-selected_column_raw = '["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]ejklmn'
+selected_column_raw = ''  # '["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]ejklmn'
 # temp - add: input() - doubles and 'empty' char possible
 
 # read data in brackets [] - row count; locales (cz_CZ, en...); filename
+selected_column_raw = txt_input("Set data: ")
 bracket_l_pos = selected_column_raw.find('[')
 bracket_r_pos = selected_column_raw.find(']')
 if bracket_r_pos > bracket_l_pos:
@@ -88,7 +89,7 @@ if bracket_r_pos > bracket_l_pos:
     print(f'filename pos: {filename_pos}')
     if len(filename_pos) % 2 != 0:      # " should be even
         print('Sth. wrong with " in []')
-    else:
+    elif len(filename_pos) > 0:
         # & check if proper .csv names
         files_count = int(len(filename_pos)/2)
         tmp_bracket_data = bracket_data[:]
@@ -115,7 +116,10 @@ if bracket_r_pos > bracket_l_pos:
                 print(f'Locale issue: {e} - check: https://faker.readthedocs.io/en/master/locales.html')
             else:
                 locale.append(e)
-
+if len(locale) == 0:
+    locale.append('en')     # default locale is en
+if row_count == 0:
+    row_count = 20
 
 # remove doubles and unused chars
 for c in selected_column_raw:
@@ -144,7 +148,7 @@ if 'e' in selected_column:
 
 for column in selected_column:
     DATA.append(providers.get(column, ''))
-print('raw data: ', DATA)
+print(f'raw data: {DATA}, locales: {locale}' )
 
 # generate and write fake rows
 fake = Faker(locale)
