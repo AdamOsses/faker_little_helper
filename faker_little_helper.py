@@ -2,8 +2,8 @@ import random
 import os
 import sys
 import readline
-from faker import Faker
-from pathvalidate import sanitize_filename
+from faker import Faker                     # pip install faker
+from pathvalidate import sanitize_filename  # pip install pathvalidate
 
 
 def txt_input(prompt, prefill=''):
@@ -128,15 +128,15 @@ while True:
 if len(locale) == 0:
     locale.append('en')     # default locale is en
 if row_count == 0:
-    row_count = 20
+    row_count = 5
 
 # remove doubles and unused chars
 for c in columns_data:
     if c not in selected_column and c in providers_char:
         selected_column += c
 
-print(f'providers_char: {providers_char}\nselected_column_raw: {columns_data}'
-      f'\nselected_column: {selected_column}')
+#print(f'providers_char: {providers_char}\nselected_column_raw: {columns_data}'
+#      f'\nselected_column: {selected_column}')
 
 # columns that affect each other
 if 'd' in selected_column:
@@ -157,7 +157,6 @@ if 'e' in selected_column:
 
 for column in selected_column:
     DATA.append(providers.get(column, ''))
-print(f'raw data: {DATA}, locales: {locale}' )
 
 # generate and write fake rows
 fake = Faker(locale)
@@ -178,10 +177,10 @@ for _ in range(row_count):
                    + DATA[first_name_column_position+1:]
     if is_name_column and (is_first_name_column or is_last_name_column or is_email_column or is_gender_column):
         DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
-        if is_last_name_column:
-            DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position + 1:]
-        if is_first_name_column:
-            DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
+    if is_last_name_column and (is_name_column or is_email_column):
+        DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position + 1:]
+    if is_first_name_column and (is_name_column or is_email_column):
+        DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
     if is_email_column:
         email_str = fake_first_name+'.'+fake_last_name+'_'+fake.domain_name()
         email_str = email_str.lower()
