@@ -167,24 +167,23 @@ for _ in range(row_count):
     fake_name = fake_first_name + " " + fake_last_name
     if is_gender_column:
         fake_gender = random.choice(['male', 'female'])
-        DATA = DATA[:gender_column_position] + [fake_gender] + DATA[gender_column_position+1:]
+        DATA[gender_column_position] = fake_gender
     if (is_name_column or is_first_name_column) and is_gender_column:
         fake_first_name = fake.first_name_male() if fake_gender == 'male' else fake.first_name_female()
         #  print(f'{fake_gender}-->{fake_first_name}')
         fake_name = fake_first_name + " " + fake_last_name
         if is_first_name_column:
-            DATA = DATA[:first_name_column_position] + [fake_first_name] \
-                   + DATA[first_name_column_position+1:]
+            DATA[first_name_column_position] = fake_first_name
     if is_name_column and (is_first_name_column or is_last_name_column or is_email_column or is_gender_column):
-        DATA = DATA[:name_column_position] + [fake_name] + DATA[name_column_position + 1:]
+        DATA[name_column_position] = fake_name
     if is_last_name_column and (is_name_column or is_email_column):
-        DATA = DATA[:last_name_column_position] + [fake_last_name] + DATA[last_name_column_position + 1:]
+        DATA[last_name_column_position] = fake_last_name
     if is_first_name_column and (is_name_column or is_email_column):
-        DATA = DATA[:first_name_column_position] + [fake_first_name] + DATA[first_name_column_position + 1:]
+        DATA[first_name_column_position] = fake_first_name
     if is_email_column:
         email_str = fake_first_name+'.'+fake_last_name+'_'+fake.domain_name()
         email_str = email_str.lower()
-        DATA = DATA[:email_column_position] + [email_str] + DATA[email_column_position+1:]
+        DATA[email_column_position] = email_str
 
     row = fake.csv(data_columns=DATA, num_rows=1, include_row_ids=False)
     row = row.replace('_', '@')  # for some reason fake.csv() doesn't display '@' correctly
