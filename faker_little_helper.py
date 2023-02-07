@@ -5,15 +5,6 @@ import readline
 from faker import Faker                     # pip install faker
 from pathvalidate import sanitize_filename  # pip install pathvalidate
 
-
-def txt_input(prompt, prefill=''):
-    readline.set_startup_hook(lambda: readline.insert_text(prefill))
-    try:
-        return input(prompt)
-    finally:
-        readline.set_startup_hook()
-
-
 fake = Faker()
 DATA = []
 fake_gender = '-X-'
@@ -26,12 +17,12 @@ locale = []  # ['en', 'pl_PL' ...]
 files = []  # .csv
 selected_column_raw = ''
 columns_data = ''
-
+text = ''
 providers = {
     'a': '{{name}}',
     'b': '{{first_name}}',
     'c': '{{last_name}}',
-    'd': '--gender--',
+    'd': '{{gender}}',
     'e': '{{email}}',       # a-e can't touch this
     'f': '{{password}}',
     'g': '{{country}}',
@@ -43,12 +34,18 @@ providers = {
     'm': '{{domain_name}}',
     'n': '{{phone_number}}',
     #    '': '{{}}',
-
-}  # {{iban}} {{credit_card_number}} {{credit_card_provider}} {{currency}}
+}  # {{iban}} {{credit_card_number}} {{credit_card_provider}} {{currency}} ...
 providers_char = ''.join(key for key in providers)
 
 
-# remove doubles and unused chars
+def txt_input(prompt, prefill=''):
+    readline.set_startup_hook(lambda: readline.insert_text(prefill))
+    try:
+        return input(prompt)
+    finally:
+        readline.set_startup_hook()
+
+
 def remove_doubles_and_unused_chars(col):
     sel_col = ''
     for c in col:
@@ -64,7 +61,7 @@ def set_data(sel_col):
     return d
 
 
-# Menu - prints all providers
+# -- Menu -- prints all providers
 os.system('clear')
 print('*' * 100)
 print('\t\t\t\t\t"FAKER LITTLE HELPER"')
@@ -81,10 +78,6 @@ print('Use [] to change default values: \n'
       '   [cz_CZ 100 "my_file.csv"]acj - write 100 data rows to my_file.csv, locale: Czech, columns: acj\n'
       '   [10 "file1.csv" "file2.csv"]mgah - write 10 data rows to file1.csv and file2.csv, columns: mgah')
 print('*' * 100)
-
-selected_column_raw = '' # selected_column_raw ='["my_file*1.csv" cz_CZ 1 pl_PLx "my_file.csv"]ejklmn'
-text = ''
-# temp - add: input() - doubles and 'empty' char possible
 
 # User input data
 while True:
@@ -110,8 +103,7 @@ while True:
         print(f'-selected_column_raw:->{selected_column_raw}<-')
         print(f'-bracket_data->{bracket_data}<-')
         print(f'-columns_data->{columns_data}<-')
-        # file names: in ""
-        filename_pos = [i for i, c in enumerate(bracket_data) if c == '"']
+        filename_pos = [i for i, c in enumerate(bracket_data) if c == '"']  # files in ""
         print(f'filename pos->{filename_pos}<-')
         if len(filename_pos) % 2 != 0:      # " should be even
             print('Sth. wrong with " in []')
@@ -146,14 +138,13 @@ while True:
                 else:
                     if e not in locale:
                         locale.append(e)
-    # set default locale (en), row_count (20) and filename (file.csv)
+    # if empty set default locale (en), row_count (20) and filename (file.csv)
     if len(locale) == 0:
         locale.append('en')
     if row_count == 0:
         row_count = 20
     if len(files) == 0:
         files.append("file.csv")
-
     # cleaning columns and data in brackets
     selected_column = remove_doubles_and_unused_chars(columns_data)
     DATA = set_data(selected_column)
@@ -168,26 +159,22 @@ while True:
         bracket_data = bracket_data.replace('[ ', '[')
     text = bracket_data + selected_column
     selected_column_raw = text
-    print(f'text mod.:->{text}<-')
 
     print(f'\n*** File(s)  : {files if len(files)>0 else "file.csv"}')
     print(f'*** Rows     : {row_count if row_count>0 else "20"}')
     print(f'*** Locale(s): {locale if len(locale)>0 else "en"}')
-    print(f'*** Column(s): {columns_data}')
     print(f'*** Column(s): {selected_column}')
     d = ' '.join(DATA)
     print(f'*** Column(s): {d}')
     print(f'\nPress ENTER to start or change input.\n')
 
-
-
-#selected_column = remove_doubles_and_unused_chars(columns_data)
-#DATA = set_data(selected_column)
-
 # generate and write fake rows
 fake = Faker(locale)
+column_names = (('"' + '","'.join(DATA) + '"').replace('{{', '')).replace('}}', '')
 for current_file in files:
     file = open(current_file, 'w', newline='')    # add list of files
+    print(column_names)
+    file.write(column_names + '\n')
     for _ in range(row_count):
         # fake: name, last_name, first_name, gender and email are depend on each other:
         fake_last_name = fake.last_name()
@@ -214,3 +201,4 @@ for current_file in files:
         print(row, end='')
         file.write(row)
     file.close()
+print("Thank you for using faker little helper.")
