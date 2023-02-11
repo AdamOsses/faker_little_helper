@@ -99,12 +99,12 @@ while True:
     if bracket_r_pos > bracket_l_pos:
         bracket_data = selected_column_raw[bracket_l_pos+1:bracket_r_pos]
         columns_data = selected_column_raw[:bracket_l_pos] + selected_column_raw[bracket_r_pos+1:]
-        print(f'-text->{text}<-')
-        print(f'-selected_column_raw:->{selected_column_raw}<-')
-        print(f'-bracket_data->{bracket_data}<-')
-        print(f'-columns_data->{columns_data}<-')
+        #print(f'-text->{text}<-')
+        #print(f'-selected_column_raw:->{selected_column_raw}<-')
+        #print(f'-bracket_data->{bracket_data}<-')
+        #print(f'-columns_data->{columns_data}<-')
         filename_pos = [i for i, c in enumerate(bracket_data) if c == '"']  # files in ""
-        print(f'filename pos->{filename_pos}<-')
+        #print(f'filename pos->{filename_pos}<-')
         if len(filename_pos) % 2 != 0:      # " should be even
             print('Sth. wrong with " in []')
         elif len(filename_pos) > 0:
@@ -113,18 +113,18 @@ while True:
             tmp_bracket_data = bracket_data[:]
             for i in range(0, files_count*2, 2):
                 file = tmp_bracket_data[filename_pos[i]+1:filename_pos[i+1]]  # slice off file name from bracket data
-                print(f'file->{file}<-')
+                #print(f'file->{file}<-')
                 bracket_data = bracket_data.replace('"' + file + '"', "")  # remove "filename" from bracket data
-                print(f'bracket data after replace filename->{bracket_data}<-')
+                #print(f'bracket data after replace filename->{bracket_data}<-')
                 if file[-4:] == '.csv': #  "sdfsdf.csv sgsgsg.csv"
                     # sanitize filename: https://pathvalidate.readthedocs.io/en/latest/pages/examples/sanitize.html
                     file = sanitize_filename(file)
                     files.append(file)
-            print(f"-files->{files}<- bracket_data->{bracket_data}<-")  # filename is between every two "
+            #print(f"-files->{files}<- bracket_data->{bracket_data}<-")  # filename is between every two "
         # locales(en cz_Cz ...) and row count
         elem = bracket_data.split(' ')
-        print(f'bracket_data->{bracket_data}<-')
-        print(f'elem->{elem}<-')
+        #print(f'bracket_data->{bracket_data}<-')
+        #print(f'elem->{elem}<-')
         for e in elem:
             if e.isdigit():
                 row_count += int(e)
