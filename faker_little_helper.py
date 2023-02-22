@@ -1,5 +1,6 @@
 import random
 import os
+import subprocess
 import sys
 import readline
 from faker import Faker                     # pip install faker
@@ -63,21 +64,25 @@ def set_data(sel_col):
 
 # -- Menu -- prints all providers
 os.system('clear')
-print('*' * 100)
+col = int(subprocess.check_output('tput cols', shell=True))
+row = int(subprocess.check_output('tput lines', shell=True))
+print(f"COL:ROW{col}:{row}")
+col = 100 if col > 100 else col
+print('*' * col)
 print('\t\t\t\t\t"FAKER LITTLE HELPER"')
-print('*' * 100)
+print('*' * col)
 for i in range(97, len(providers)+97):
     print(f'{chr(i)} - {providers[chr(i)][2:-2]}', end='\t')
     if not (i % 6):
         print('')
 print('')
-print('*' * 100)
+print('*' * col)
 print('Set columns you want using above letters. FLH write 20 rows fake datas to "file.csv"')
 print('Default filename: "file.csv", default rows count: 20, default locale: en')
 print('Use [] to change default values: \n'
       '   [cz_CZ 100 "my_file.csv"]acj - write 100 data rows to my_file.csv, locale: Czech, columns: acj\n'
       '   [10 "file1.csv" "file2.csv"]mgah - write 10 data rows to file1.csv and file2.csv, columns: mgah')
-print('*' * 100)
+print('*' * col)
 
 # User input data
 while True:
